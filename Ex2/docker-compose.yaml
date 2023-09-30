@@ -1,0 +1,40 @@
+version: '3.7'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: iftikhar-nginx
+    restart: always
+    volumes:
+      - ./nginx.conf.d:/etc/nginx/conf.d
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - app
+
+  mongodb:
+    image: mongo:4.4
+    container_name: iftikhar-mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - /data/db:/data/db
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+  app:
+    build: ./app
+    container_name: iftikhar_c
+    restart: always
+    volumes:
+      - ./app:/app
+      - ~/.m2:/root/.m2
+    ports:
+      - 8888:80
+    depends_on:
+      - mongodb
+    working_dir: /app
+    command: mvn clean spring-boot:run
+
+volumes:
+  db-volume:
