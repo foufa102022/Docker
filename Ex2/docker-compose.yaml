@@ -30,7 +30,7 @@ services:
       - ./app:/app
       - ~/.m2:/root/.m2
     ports:
-      - 8888:80
+      - 8010:8080
     depends_on:
       - mongodb
     working_dir: /app
